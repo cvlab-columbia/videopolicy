@@ -1,6 +1,6 @@
 # Video Generators Are Robot Policies
 ### Arxiv 2025
-### [Project Page](https://videopolicy.cs.columbia.edu/) | [Paper](https://videopolicy.cs.columbia.edu/assets/robust_video_policy.pdf) | [ArXiv](https://arxiv.org/abs/2406.16862)
+### [Project Page](https://videopolicy.cs.columbia.edu/) | [Paper](https://videopolicy.cs.columbia.edu/assets/video_policy.pdf) | [ArXiv](https://arxiv.org/abs/2406.16862)
 
 [Junbang Liang](https://junbangliang.github.io/)<sup>1</sup>, [Pavel Tokmakov](https://pvtokmakov.github.io/home/)<sup>2</sup>, [Ruoshi Liu](https://ruoshiliu.github.io/)<sup>1</sup>, [Sruthi Sudhakar](https://sruthisudhakar.github.io/)<sup>1</sup>, [Paarth Shah](https://www.paarthshah.me/)<sup>2</sup>, [Rares Ambrus](https://www.tri.global/about-us/dr-rares-ambrus/)<sup>2</sup>, [Carl Vondrick](https://www.cs.columbia.edu/~vondrick/)<sup>1</sup>
 
