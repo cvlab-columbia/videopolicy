@@ -1,0 +1,33 @@
+torch==2.1.0
+torchdata==0.7.0
+torchvision==0.16.0
+xformers==0.0.22.post7
+pytorch-lightning==2.1.4
+transformers==4.37.2
+open-clip-torch==2.24.0
+clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
+invisible-watermark==0.2.0
+numpy==1.23.3
+opencv-contrib-python==4.6.0.66
+opencv-python==4.6.0.66
+opencv-python-headless==4.6.0.66
+matplotlib==3.8.3
+h5py==3.7.0
+huggingface-hub==0.29.1
+safetensors==0.5.2
+scipy==1.12.0
+kornia==0.7.1
+omegaconf==2.3.0
+imageio==2.22.0
+einops==0.7.0
+PyYAML==6.0.1
+filelock==3.17.0
+wandb==0.16.3
+natsort==8.4.0
+lovely-numpy==0.2.13
+lovely-tensors==0.1.15
+rich==13.9.4
+webdataset==0.2.86
+ruamel.yaml==0.18.7
+mujoco==3.2.6
+-e git+https://github.com/Stability-AI/datapipelines.git@8bce77d147033b3a5285b6d45ee85f33866964fc#egg=sdata

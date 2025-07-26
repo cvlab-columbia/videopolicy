@@ -1,0 +1,10 @@
+video_model/logs
+video_model/checkpoints
+video_model/outputs
+video_model/src
+video_model/experiments
+video_model/datasets
+packages/**
+!packages/.gitkeep
+src
+**/__pycache__/

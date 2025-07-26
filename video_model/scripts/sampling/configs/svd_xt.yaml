@@ -1,0 +1,237 @@
+model:
+  target: sgm.models.diffusion.DiffusionEngine
+  params:
+    scale_factor: 0.18215
+    disable_first_stage_autocast: True
+    ckpt_path: checkpoints/stage_2_trained_step_369k.ckpt
+
+    denoiser_config:
+      target: sgm.modules.diffusionmodules.denoiser.Denoiser
+      params:
+        scaling_config:
+          target: sgm.modules.diffusionmodules.denoiser_scaling.VScalingWithEDMcNoise
+
+    network_config:
+      target: sgm.modules.diffusionmodules.video_model.VideoUNet
+      params:
+        adm_in_channels: 768
+        num_classes: sequential
+        use_checkpoint: True
+        in_channels: 8
+        out_channels: 4
+        model_channels: 320
+        attention_resolutions: [4, 2, 1]
+        num_res_blocks: 2
+        channel_mult: [1, 2, 4, 4]
+        num_head_channels: 64
+        use_linear_in_transformer: True
+        transformer_depth: 1
+        context_dim: 1024
+        spatial_transformer_attn_type: softmax-xformers
+        extra_ff_mix_layer: True
+        use_spatial_context: True
+        merge_strategy: learned_with_images
+        video_kernel_size: [3, 1, 1]
+        pose_net_params:
+          h_pose_indicies: [9, 13, 16, 19, 22]
+          vision_encoder_output_channels: 420
+          vision_encoder_scale_factor: 64
+          frame_width: 256
+          frame_height: 256
+          action_dimension: 7
+
+    conditioner_config:
+      target: sgm.modules.GeneralConditioner
+      params:
+        emb_models:
+        - is_trainable: False
+          input_key: cond_frames_without_noise
+          target: sgm.modules.encoders.modules.FrozenOpenCLIPImagePredictionEmbedder
+          params:
+            n_cond_frames: 1
+            n_copies: 1
+            open_clip_embedding_config:
+              target: sgm.modules.encoders.modules.FrozenOpenCLIPImageEmbedder
+              params:
+                freeze: True
+
+        - input_key: fps_id
+          is_trainable: False
+          target: sgm.modules.encoders.modules.ConcatTimestepEmbedderND
+          params:
+            outdim: 256
+
+        - input_key: motion_bucket_id
+          is_trainable: False
+          target: sgm.modules.encoders.modules.ConcatTimestepEmbedderND
+          params:
+            outdim: 256
+
+        - input_key: cond_frames
+          is_trainable: False
+          target: sgm.modules.encoders.modules.VideoPredictionEmbedderWithEncoder
+          params:
+            disable_encoder_autocast: True
+            n_cond_frames: 1
+            n_copies: 1
+            is_ae: True
+            encoder_config:
+              target: sgm.models.autoencoder.AutoencoderKLModeOnly
+              params:
+                embed_dim: 4
+                monitor: val/rec_loss
+                ddconfig:
+                  attn_type: vanilla-xformers
+                  double_z: True
+                  z_channels: 4
+                  resolution: 256
+                  in_channels: 3
+                  out_ch: 3
+                  ch: 128
+                  ch_mult: [1, 2, 4, 4]
+                  num_res_blocks: 2
+                  attn_resolutions: []
+                  dropout: 0.0
+                lossconfig:
+                  target: torch.nn.Identity
+
+        - input_key: cond_aug
+          is_trainable: False
+          target: sgm.modules.encoders.modules.ConcatTimestepEmbedderND
+          params:
+            outdim: 256
+
+    first_stage_config:
+      target: sgm.models.autoencoder.AutoencodingEngine
+      params:
+        loss_config:
+          target: torch.nn.Identity
+        regularizer_config:
+          target: sgm.modules.autoencoding.regularizers.DiagonalGaussianRegularizer
+        encoder_config: 
+          target: sgm.modules.diffusionmodules.model.Encoder
+          params:
+            attn_type: vanilla
+            double_z: True
+            z_channels: 4
+            resolution: 256
+            in_channels: 3
+            out_ch: 3
+            ch: 128
+            ch_mult: [1, 2, 4, 4]
+            num_res_blocks: 2
+            attn_resolutions: []
+            dropout: 0.0
+        decoder_config:
+          target: sgm.modules.autoencoding.temporal_ae.VideoDecoder
+          params:
+            attn_type: vanilla
+            double_z: True
+            z_channels: 4
+            resolution: 256
+            in_channels: 3
+            out_ch: 3
+            ch: 128
+            ch_mult: [1, 2, 4, 4]
+            num_res_blocks: 2
+            attn_resolutions: []
+            dropout: 0.0
+            video_kernel_size: [3, 1, 1]
+
+    sampler_config:
+      target: sgm.modules.diffusionmodules.sampling.EulerEDMSampler
+      params:
+        num_steps: 30
+
+        discretization_config:
+          target: sgm.modules.diffusionmodules.discretizer.EDMDiscretization
+          params:
+            sigma_max: 700.0
+
+        guider_config:
+          target: sgm.modules.diffusionmodules.guiders.LinearPredictionGuider
+          params:
+            num_frames: 25
+            num_pose_frames: 32
+            max_scale: 2.0
+            min_scale: 2.0
+
+data:
+  params:
+    n_frames: 25
+    cond_aug: 0.02
+    motion_bucket_id: 100
+    fps_id: 6
+    frame_width: 256
+    frame_height: 256
+    tasks:
+
+      PnPCabToCounter:
+        num_experiments: 50
+      PnPCounterToCab:
+        num_experiments: 50
+      PnPCounterToMicrowave:
+        num_experiments: 50
+      PnPCounterToSink:
+        num_experiments: 50
+      PnPCounterToStove:
+        num_experiments: 50
+      PnPMicrowaveToCounter:
+        num_experiments: 50
+      PnPSinkToCounter:
+        num_experiments: 50
+      PnPStoveToCounter:
+        num_experiments: 50
+
+      TurnOffMicrowave:
+        num_experiments: 50
+      TurnOnMicrowave:
+        num_experiments: 50
+      TurnOffSinkFaucet:
+        num_experiments: 50
+      TurnOnSinkFaucet:
+        num_experiments: 50
+      TurnSinkSpout:
+        num_experiments: 50
+      TurnOffStove:
+        num_experiments: 50
+      TurnOnStove:
+        num_experiments: 50
+
+      CoffeePressButton:
+        num_experiments: 50
+      CoffeeServeMug:
+        num_experiments: 50
+      CoffeeSetupMug:
+        num_experiments: 50
+      CloseDoubleDoor:
+        num_experiments: 50
+      CloseSingleDoor:
+        num_experiments: 50
+      OpenDoubleDoor:
+        num_experiments: 50
+      OpenSingleDoor:
+        num_experiments: 50
+      CloseDrawer:
+        num_experiments: 50
+      OpenDrawer:
+        num_experiments: 50
+
+    skip_demos:
+      TurnOnStove: ["demo_33", "demo_37"]
+    video_stride: 4
+    video_pred_horizon: 8
+    aug:
+      brightness: 0.2
+      contrast: 0.2
+      saturation_rgb: 0.2
+      hue_rgb: 0.05
+    action_dim: 7
+    swap_rgb: False
+    mode: 'test'
+
+decoding_t: 25
+log_folder: "example_inference"
+number_of_experiments: 50   # Executes at most one task at a time
+max_traj_len: 1000
+action_horizon: 16
