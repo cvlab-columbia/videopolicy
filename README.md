@@ -1,6 +1,6 @@
 # Video Generators Are Robot Policies
 ### Arxiv 2025
-### [Project Page](https://videopolicy.cs.columbia.edu/) | [Paper](https://videopolicy.cs.columbia.edu/assets/video_policy.pdf) | [ArXiv](https://arxiv.org/abs/2406.16862)
+### [Project Page](https://videopolicy.cs.columbia.edu/) | [Paper](https://videopolicy.cs.columbia.edu/assets/video_policy.pdf) | [ArXiv](https://arxiv.org/abs/2508.00795)
 
 [Junbang Liang](https://junbangliang.github.io/)<sup>1</sup>, [Pavel Tokmakov](https://pvtokmakov.github.io/home/)<sup>2</sup>, [Ruoshi Liu](https://ruoshiliu.github.io/)<sup>1</sup>, [Sruthi Sudhakar](https://sruthisudhakar.github.io/)<sup>1</sup>, [Paarth Shah](https://www.paarthshah.me/)<sup>2</sup>, [Rares Ambrus](https://www.tri.global/about-us/dr-rares-ambrus/)<sup>2</sup>, [Carl Vondrick](https://www.cs.columbia.edu/~vondrick/)<sup>1</sup>
 
@@ -85,12 +85,10 @@ This research is based on work partially supported by the Toyota Research Instit
 
 ##  Citation
 ```
-@misc{liang2024dreamitate,
-      title={Dreamitate: Real-World Visuomotor Policy Learning via Video Generation}, 
-      author={Junbang Liang and Ruoshi Liu and Ege Ozguroglu and Sruthi Sudhakar and Achal Dave and Pavel Tokmakov and Shuran Song and Carl Vondrick},
-      year={2024},
-      eprint={2406.16862},
-      archivePrefix={arXiv},
-      primaryClass={id='cs.RO' full_name='Robotics' is_active=True alt_name=None in_archive='cs' is_general=False description='Roughly includes material in ACM Subject Class I.2.9.'}
+@article{liang2025video,
+  title={Video Generators are Robot Policies}, 
+  author={Liang, Junbang and Tokmakov, Pavel and Liu, Ruoshi and Sudhakar, Sruthi and Shah, Paarth and Ambrus, Rares and Vondrick, Carl},
+  journal={arXiv preprint arXiv:2508.00795},
+  year={2025}
 }
 ```
