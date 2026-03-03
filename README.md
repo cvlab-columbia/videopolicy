@@ -23,8 +23,8 @@ Install simulation environment:
 ```
 cd packages && \
 git clone -b robocasa https://github.com/ARISE-Initiative/robomimic && pip install -e robomimic && \
-git clone https://github.com/ARISE-Initiative/robosuite && pip install -e robosuite && \
-git clone https://github.com/robocasa/robocasa && pip install -e robocasa && \
+git clone -b v1.5.1 https://github.com/ARISE-Initiative/robosuite && pip install -e robosuite && \
+git clone -b v0.2 https://github.com/robocasa/robocasa && pip install -e robocasa && \
 python robocasa/robocasa/scripts/download_kitchen_assets.py && \
 python robocasa/robocasa/scripts/setup_macros.py
 ```
